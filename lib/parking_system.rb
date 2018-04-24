@@ -141,7 +141,7 @@ class ParkingSystem
   private
 
   def exit_execution
-    print_result 'Argument type error, check again'
+    print_result 'Argument is not integer, check again'
     exit 1
   end
 end
