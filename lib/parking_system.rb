@@ -20,6 +20,12 @@ class ParkingSystem
     nil
   end
 
+  def str_to_int(num_in_str)
+    num_in_int = to_num_or_nil(num_in_str)
+    exit_execution unless num_in_int
+    num_in_int
+  end
+
   def compact_to_string(size, array)
     result_string = ''
 
@@ -33,8 +39,7 @@ class ParkingSystem
   end
 
   def create_parking_lot(splitted_input)
-    size = to_num_or_nil(splitted_input[1])
-    exit_execution unless size
+    size = str_to_int(splitted_input[1])
     @parking_lot = ParkingLot.new(size)
   end
 
@@ -82,6 +87,12 @@ class ParkingSystem
     end
   end
 
+  def leave_process(num_in_str)
+    num_in_int = str_to_int(num_in_str)
+    leave_park_slot(num_in_int - 1)
+    print_result('Slot number ' + num_in_str + ' is free')
+  end
+
   def parse_user_input
     splitted_input = input.split
     if splitted_input.size == 1
@@ -92,10 +103,7 @@ class ParkingSystem
         size = splitted_input[1]
         print_result('Created a parking lot with ' + size + ' slots')
       elsif splitted_input[0] == 'leave'
-        num_in_int = to_num_or_nil(splitted_input[1])
-        exit_execution unless num_in_int
-        leave_park_slot(num_in_int - 1)
-        print_result('Slot number ' + splitted_input[1] + ' is free')
+        leave_process(splitted_input[1])
       elsif splitted_input[0] == 'registration_numbers_for_cars_with_colour'
         result = registration_numbers_by_color(splitted_input[1])
         print_result result

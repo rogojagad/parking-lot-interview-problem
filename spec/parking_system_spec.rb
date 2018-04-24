@@ -55,12 +55,27 @@ RSpec.describe ParkingSystem do
     end
   end
 
+  describe 'str_to_int' do
+    context 'given string is convertable to int' do
+      it 'returns int number' do
+        expect(parking_system.str_to_int('2')).to eq(2)
+      end
+    end
+
+    context 'given string is not convertable' do
+      it 'exit_execution' do
+        expect(parking_system).to receive(:exit_execution)
+        parking_system.str_to_int('two')
+      end
+    end
+  end
+
   describe '#create_parking_lot' do
     it 'create new parking lot with given size' do
       input = %w[create_parking_lot 5]
 
-      allow(parking_system).to receive(:to_num_or_nil).with(input[1])
-                                                      .and_return(5)
+      allow(parking_system).to receive(:str_to_int).with(input[1])
+                                                   .and_return(5)
 
       parking_system.create_parking_lot(input)
 
@@ -77,6 +92,17 @@ RSpec.describe ParkingSystem do
       expect(parking_lot).to receive(:leave).with(slot_num)
 
       parking_system.leave_park_slot(slot_num)
+    end
+  end
+
+  describe '#leave_process' do
+    it 'check condition to leave parking slot properly' do
+      allow(parking_system).to receive(:str_to_int).with('5').and_return(5)
+      expect(parking_system).to receive(:leave_park_slot).with(4)
+      expect(parking_system).to receive(:print_result)
+        .with('Slot number 5 is free')
+
+      parking_system.leave_process '5'
     end
   end
 
