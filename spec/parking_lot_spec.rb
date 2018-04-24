@@ -36,4 +36,29 @@ RSpec.describe ParkingLot do
       expect(parking_lot.slots[slot_num]).to be_nil
     end
   end
+
+  describe '#get_reg_numbers_by_color' do
+    let(:car1) { instance_double Car }
+    let(:car2) { instance_double Car }
+    let(:car3) { instance_double Car }
+    #
+    before do
+      allow(car1).to receive(:reg_no).and_return('qwe')
+      allow(car2).to receive(:reg_no).and_return('asd')
+      allow(car3).to receive(:reg_no).and_return('zxc')
+      #
+      allow(car1).to receive(:color).and_return('white')
+      allow(car2).to receive(:color).and_return('black')
+      allow(car3).to receive(:color).and_return('white')
+    end
+
+    it 'returns array of registration number' do
+      slots = [car1, car2, car3]
+      expected_array = %w[qwe zxc]
+
+      allow(parking_lot).to receive(:slots).and_return(slots)
+      result = parking_lot.get_reg_numbers_by_color 'white'
+      expect(result).to eq(expected_array)
+    end
+  end
 end

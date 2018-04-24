@@ -61,4 +61,45 @@ RSpec.describe ParkingSystem do
       parking_system.leave_park_slot(slot_num)
     end
   end
+
+  describe '#registration_numbers_by_color' do
+    it 'retrieve reg_number of cars with corresponding color' do
+      array = [
+        'b 1234 a',
+        'c 2345 b',
+        'd 3456 d'
+      ]
+      size = array.size
+      parking_lot = double
+      color = 'white'
+
+      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+      allow(parking_lot).to receive(:get_reg_numbers_by_color).with(color)
+                                                              .and_return(array)
+
+      expect(parking_system).to receive(:compact_to_string)
+        .with(size, array)
+
+      parking_system.registration_numbers_by_color color
+    end
+  end
+
+  describe '#compact_to_string' do
+    it 'coverts given array to suitable string format' do
+      array = %w[
+        qwe
+        asd
+        zxc
+        dfgert
+      ]
+
+      size = array.size
+
+      expected_string = 'qwe, asd, zxc, dfgert'
+
+      result = parking_system.compact_to_string(size, array)
+
+      expect(result).to eq(expected_string)
+    end
+  end
 end

@@ -20,10 +20,30 @@ class ParkingSystem
     nil
   end
 
+  def compact_to_string(size, array)
+    result_string = ''
+
+    array.each_with_index do |result, idx|
+      result_string += result
+
+      result_string += ', ' if idx != size - 1
+    end
+
+    result_string
+  end
+
   def create_parking_lot(splitted_input)
     size = to_num_or_nil(splitted_input[1])
 
     @parking_lot = ParkingLot.new(size)
+  end
+
+  def registration_numbers_by_color(color)
+    results = parking_lot.get_reg_numbers_by_color(color)
+
+    size = results.size
+
+    compact_to_string(size, results)
   end
 
   def parse_user_input
@@ -40,7 +60,8 @@ class ParkingSystem
         leave_park_slot(num_in_int - 1)
         print_result('Slot number ' + splitted_input[1] + ' is free')
       elsif splitted_input[0] == 'registration_numbers_for_cars_with_colour'
-
+        result = registration_numbers_by_color(splitted_input[1])
+        print_result result
       elsif splitted_input[0] == 'slot_numbers_for_cars_with_colour'
 
       elsif splitted_input[0] == 'slot_number_for_registration_number'
