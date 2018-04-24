@@ -1,6 +1,6 @@
 class ParkingSystem
   attr_accessor :parking_lot
-  attr_reader :input
+  attr_reader :input, :input_path
 
   def receive_user_input
     @input = STDIN.gets.strip
@@ -126,12 +126,20 @@ class ParkingSystem
     parse_user_input while receive_user_input
   end
 
-  def file_mode; end
+  def file_mode
+    input_file = File.open(input_path, 'r')
+
+    input_file.each_line do |line|
+      @input = line
+      parse_user_input
+    end
+  end
 
   def run
     input_filename = ARGV[0]
 
     if input_filename
+      set_input_path input_filename
       file_mode
     else
       interactive_mode
@@ -143,5 +151,10 @@ class ParkingSystem
   def exit_execution
     print_result 'Argument is not integer, check again'
     exit 1
+  end
+
+  def set_input_path(filename)
+    @input_path = File.join(File.dirname(__FILE__), '../' + filename)
+    # puts @input_path
   end
 end

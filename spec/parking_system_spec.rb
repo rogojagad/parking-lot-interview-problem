@@ -6,7 +6,7 @@ RSpec.describe ParkingSystem do
   describe '#run' do
     context 'system argument given' do
       it 'runs in file mode' do
-        ARGV.replace ['filname']
+        ARGV.replace ['filename']
         expect(parking_system).to receive(:file_mode)
         parking_system.run
       end
@@ -88,7 +88,8 @@ RSpec.describe ParkingSystem do
       parking_lot = double
       slot_num = Random.rand(1..10)
 
-      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+      allow(parking_system).to receive(:parking_lot)
+        .and_return(parking_lot)
       expect(parking_lot).to receive(:leave).with(slot_num)
 
       parking_system.leave_park_slot(slot_num)
@@ -97,7 +98,8 @@ RSpec.describe ParkingSystem do
 
   describe '#leave_process' do
     it 'check condition to leave parking slot properly' do
-      allow(parking_system).to receive(:str_to_int).with('5').and_return(5)
+      allow(parking_system).to receive(:str_to_int).with('5')
+                                                   .and_return(5)
       expect(parking_system).to receive(:leave_park_slot).with(4)
       expect(parking_system).to receive(:print_result)
         .with('Slot number 5 is free')
@@ -117,9 +119,11 @@ RSpec.describe ParkingSystem do
       parking_lot = double
       color = 'white'
 
-      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
-      allow(parking_lot).to receive(:get_reg_numbers_by_color).with(color)
-                                                              .and_return(array)
+      allow(parking_system).to receive(:parking_lot)
+        .and_return(parking_lot)
+      allow(parking_lot).to receive(:get_reg_numbers_by_color)
+        .with(color)
+        .and_return(array)
 
       expect(parking_system).to receive(:compact_to_string)
         .with(size, array)
@@ -154,11 +158,14 @@ RSpec.describe ParkingSystem do
       parking_lot = double
       color = 'white'
 
-      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
-      allow(parking_lot).to receive(:get_slot_num_by_color).with(color)
-                                                           .and_return(array)
+      allow(parking_system).to receive(:parking_lot)
+        .and_return(parking_lot)
+      allow(parking_lot).to receive(:get_slot_num_by_color)
+        .with(color)
+        .and_return(array)
 
-      expect(parking_system).to receive(:compact_to_string).with(size, array)
+      expect(parking_system).to receive(:compact_to_string)
+        .with(size, array)
 
       parking_system.slot_numbers_by_color color
     end
@@ -172,7 +179,8 @@ RSpec.describe ParkingSystem do
       it 'returns slot number in string' do
         slot_num = Random.rand(1..10).to_s
 
-        allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+        allow(parking_system).to receive(:parking_lot)
+          .and_return(parking_lot)
         allow(parking_lot).to receive(:get_slot_num_by_reg_no)
           .with(reg_no)
           .and_return(slot_num)
@@ -185,7 +193,8 @@ RSpec.describe ParkingSystem do
 
     context 'registration number not exist' do
       it 'returns not found string' do
-        allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+        allow(parking_system).to receive(:parking_lot)
+          .and_return(parking_lot)
         allow(parking_lot).to receive(:get_slot_num_by_reg_no)
           .with(reg_no)
           .and_return(nil)
@@ -207,8 +216,10 @@ RSpec.describe ParkingSystem do
       expect(Car).to receive(:new).with(reg_no: reg_no, color: color)
                                   .and_return(car)
 
-      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
-      expect(parking_lot).to receive(:park).with(car: car, slot_num: slot_num)
+      allow(parking_system).to receive(:parking_lot)
+        .and_return(parking_lot)
+      expect(parking_lot).to receive(:park).with(car: car,
+                                                 slot_num: slot_num)
 
       parking_system.park_on_slot(reg_no: reg_no,
                                   color: color,
@@ -245,6 +256,21 @@ RSpec.describe ParkingSystem do
                                   color: color,
                                   slot_num: nil)
       end
+    end
+  end
+
+  describe '#file_mode' do
+    it 'opens file and run program from file input' do
+      file = StringIO.new "test1\ntest2\ntest3"
+      path = 'dummy/path'
+
+      allow(parking_system).to receive(:input_path).and_return(path)
+      expect(File).to receive(:open).with(path, 'r')
+                                    .and_return(file)
+      expect(parking_system).to receive(:parse_user_input)
+        .exactly(3).times
+
+      parking_system.file_mode
     end
   end
 end
