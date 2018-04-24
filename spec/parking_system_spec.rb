@@ -22,4 +22,18 @@ RSpec.describe ParkingSystem do
       parking_system.print_result output
     end
   end
+
+  describe '#to_num_or_nil' do
+    context 'given string is convertable to int' do
+      it 'returns int number of given string' do
+        expect(parking_system.to_num_or_nil('231')).to eq(231)
+      end
+    end
+
+    context 'given string is not convertable to int' do
+      it 'returns nil' do
+        expect(parking_system.to_num_or_nil('two')).to be_nil
+      end
+    end
+  end
 end
