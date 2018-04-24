@@ -49,4 +49,16 @@ RSpec.describe ParkingSystem do
       expect(parking_system.parking_lot.slots.size).to eq(5)
     end
   end
+
+  describe '#leave_park_slot' do
+    it 'deletes car on the corresponding slot' do
+      parking_lot = double
+      slot_num = Random.rand(1..10)
+
+      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+      expect(parking_lot).to receive(:leave).with(slot_num)
+
+      parking_system.leave_park_slot(slot_num)
+    end
+  end
 end

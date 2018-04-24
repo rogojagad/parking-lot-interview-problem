@@ -6,6 +6,10 @@ class ParkingSystem
     @input = STDIN.gets.strip
   end
 
+  def leave_park_slot(slot_num)
+    parking_lot.leave slot_num
+  end
+
   def print_result(output)
     puts output
   end
@@ -32,7 +36,9 @@ class ParkingSystem
         size = splitted_input[1]
         print_result('Created a parking lot with ' + size + ' slots')
       elsif splitted_input[0] == 'leave'
-
+        num_in_int = to_num_or_nil(splitted_input[1])
+        leave_park_slot(num_in_int - 1)
+        print_result('Slot number ' + splitted_input[1] + ' is free')
       elsif splitted_input[0] == 'registration_numbers_for_cars_with_colour'
 
       elsif splitted_input[0] == 'slot_numbers_for_cars_with_colour'
