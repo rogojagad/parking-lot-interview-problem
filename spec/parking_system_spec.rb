@@ -36,4 +36,17 @@ RSpec.describe ParkingSystem do
       end
     end
   end
+
+  describe '#create_parking_lot' do
+    it 'create new parking lot with given size' do
+      input = %w[create_parking_lot 5]
+
+      allow(parking_system).to receive(:to_num_or_nil).with(input[1])
+                                                      .and_return(5)
+
+      parking_system.create_parking_lot(input)
+
+      expect(parking_system.parking_lot.slots.size).to eq(5)
+    end
+  end
 end
