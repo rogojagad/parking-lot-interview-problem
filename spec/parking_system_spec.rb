@@ -102,4 +102,102 @@ RSpec.describe ParkingSystem do
       expect(result).to eq(expected_string)
     end
   end
+
+  describe '#slot_numbers_by_color' do
+    it 'retrieve slot number of cars with corresponding color' do
+      array = [1, 3, 4]
+      size = array.size
+      parking_lot = double
+      color = 'white'
+
+      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+      allow(parking_lot).to receive(:get_slot_num_by_color).with(color)
+                                                           .and_return(array)
+
+      expect(parking_system).to receive(:compact_to_string).with(size, array)
+
+      parking_system.slot_numbers_by_color color
+    end
+  end
+
+  describe '#slot_num_by_registration_number' do
+    let(:parking_lot) { double }
+    let(:reg_no) { 'qwe 123 asd' }
+
+    context 'registration number exist' do
+      it 'returns slot number in string' do
+        slot_num = Random.rand(1..10).to_s
+
+        allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+        allow(parking_lot).to receive(:get_slot_num_by_reg_no)
+          .with(reg_no)
+          .and_return(slot_num)
+
+        result = parking_system.slot_num_by_registration_number(reg_no)
+
+        expect(result).to eq(slot_num)
+      end
+    end
+
+    context 'registration number not exist' do
+      it 'returns not found string' do
+        allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+        allow(parking_lot).to receive(:get_slot_num_by_reg_no)
+          .with(reg_no)
+          .and_return(nil)
+
+        result = parking_system.slot_num_by_registration_number(reg_no)
+
+        expect(result).to eq('Not found')
+      end
+    end
+  end
+
+  describe '#park_on_slot' do
+    it 'parks new car in an empty slot' do
+      car = double
+      parking_lot = double
+      reg_no = 'b 6213 z'
+      color = 'black'
+      slot_num = Random.rand(1...5)
+      expect(Car).to receive(:new).with(reg_no: reg_no, color: color)
+                                  .and_return(car)
+
+      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+      expect(parking_lot).to receive(:park).with(car: car, slot_num: slot_num)
+
+      parking_system.park_on_slot(reg_no: reg_no,
+                                  color: color,
+                                  slot_num: slot_num)
+    end
+  end
+
+  describe '#park_check' do
+    let(:reg_no) { 'qwe' }
+    let(:color) { 'blue' }
+
+    context 'slot available' do
+      it 'parks car' do
+        slot_num = Random.rand(1..10)
+
+        expect(parking_system).to receive(:park_on_slot)
+          .with(reg_no: reg_no, color: color, slot_num: slot_num)
+
+        expect(parking_system).to receive(:print_result)
+          .with('Allocated slot number: ' + (slot_num + 1).to_s)
+
+        parking_system.park_check(reg_no: reg_no,
+                                  color: color,
+                                  slot_num: slot_num)
+      end
+    end
+
+    context 'slot unavailable' do
+      it 'prints not found message' do
+        parking_system.park_check(reg_no: reg_no,
+                                  color: color,
+                                  slot_num: nil)
+      end
+    end
+  end
 end
