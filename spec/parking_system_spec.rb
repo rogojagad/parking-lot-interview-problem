@@ -3,6 +3,24 @@ require 'spec_helper'
 RSpec.describe ParkingSystem do
   subject(:parking_system) { ParkingSystem.new }
 
+  describe '#run' do
+    context 'system argument given' do
+      it 'runs in file mode' do
+        ARGV.replace ['filname']
+        expect(parking_system).to receive(:file_mode)
+        parking_system.run
+      end
+    end
+
+    context 'system argument not given' do
+      it 'runs in interactive mode' do
+        ARGV.replace [nil]
+        expect(parking_system).to receive(:interactive_mode)
+        parking_system.run
+      end
+    end
+  end
+
   describe '#receive_user_input' do
     it 'receives user input and stores to instance variable' do
       input_command = 'any_random_input'
@@ -194,6 +212,9 @@ RSpec.describe ParkingSystem do
 
     context 'slot unavailable' do
       it 'prints not found message' do
+        expect(parking_system).to receive(:print_result)
+          .with('Sorry, parking lot is full')
+
         parking_system.park_check(reg_no: reg_no,
                                   color: color,
                                   slot_num: nil)

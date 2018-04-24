@@ -76,9 +76,9 @@ class ParkingSystem
   def park_check(reg_no:, color:, slot_num:)
     if slot_num
       park_on_slot(reg_no: reg_no, color: color, slot_num: slot_num)
-      print_result('Allocated slot number: ' + (slot_num + 1).to_s)
+      print_result 'Allocated slot number: ' + (slot_num + 1).to_s
     else
-      print_result('Sorry, parking lot is full')
+      print_result 'Sorry, parking lot is full'
     end
   end
 
@@ -117,6 +117,8 @@ class ParkingSystem
   def interactive_mode
     parse_user_input while receive_user_input
   end
+
+  def file_mode; end
 
   def run
     input_filename = ARGV[0]
