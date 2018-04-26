@@ -5,14 +5,14 @@ Made by Rogo Jagad Alit, Informatics Departement batch 2015 for Mapan.id Interns
 ```
 .
 +-- lib
-|		+-- car.rb
-|		+-- main.rb
-|		+-- parking_lot.rb
-|		+-- parking_system.rb
+|  +-- car.rb
+|  +-- main.rb
+|  +-- parking_lot.rb
+|  +-- parking_system.rb
 +-- spec
-|		+-- parking_lot_spec.rb
-|		+-- parking_system_spec.rb
-|		+-- spec_helper.rb
+|  +-- parking_lot_spec.rb
+|  +-- parking_system_spec.rb
+|  +-- spec_helper.rb
 +-- .gitignore
 +-- .rspec
 +-- file_inputs.txt
