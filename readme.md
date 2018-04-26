@@ -1,7 +1,7 @@
 # Parking Lot
 Made by Rogo Jagad Alit, Informatics Departement batch 2015 for Mapan.id Internship test
 
-# Directory Structure
+## Directory Structure
 ```
 .
 +-- lib
@@ -23,7 +23,7 @@ Made by Rogo Jagad Alit, Informatics Departement batch 2015 for Mapan.id Interns
 +-- readme.md
 ```
 
-# How to Run
+## How to Run
 This solution is using Ruby programming language and RSpec gem for unit testing.
 
 
@@ -37,7 +37,7 @@ Make sure you have install Bundle in your testing environment.
 * run `./parking_lot [input filename]` to run solution in file mode
 
 
-# Problem Statement
+## Problem Statement
 I own a multi-storey parking lot that can hold up to 'n' cars at any given point in time.
 Each slot is given a number starting at 1 increasing with increasing distance from the
 entry point in steps of one. I want to create an automated ticketing system that allows
