@@ -112,7 +112,7 @@ RSpec.describe ParkingLot do
     context 'car with reg_no not exist' do
       it 'returns nil' do
         result = parking_lot.get_slot_num_by_reg_no 'lkj'
-        expect(result).to eq(nil)
+        expect(result).to be_nil
       end
     end
   end

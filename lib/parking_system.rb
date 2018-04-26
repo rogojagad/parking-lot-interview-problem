@@ -38,9 +38,9 @@ class ParkingSystem
     result_string
   end
 
-  def create_parking_lot(splitted_input)
-    size = str_to_int(splitted_input[1])
-    @parking_lot = ParkingLot.new(size)
+  def create_parking_lot(size_in_str)
+    size_in_int = str_to_int(size_in_str)
+    @parking_lot = ParkingLot.new(size_in_int)
   end
 
   def registration_numbers_by_color(color)
@@ -93,32 +93,41 @@ class ParkingSystem
     print_result('Slot number ' + num_in_str + ' is free')
   end
 
+  def two_statement_command(splitted_input)
+    if splitted_input[0] == 'create_parking_lot'
+      size = splitted_input[1]
+      create_parking_lot(size)
+      print_result('Created a parking lot with ' + size.to_s + ' slots')
+    elsif splitted_input[0] == 'leave'
+      leave_process(splitted_input[1])
+    elsif splitted_input[0] == 'registration_numbers_for_cars_with_colour'
+      result = registration_numbers_by_color(splitted_input[1])
+      print_result result
+    elsif splitted_input[0] == 'slot_numbers_for_cars_with_colour'
+      result = slot_numbers_by_color(splitted_input[1])
+      print_result result
+    elsif splitted_input[0] == 'slot_number_for_registration_number'
+      result = slot_num_by_registration_number(splitted_input[1])
+      print_result result
+    end
+  end
+
+  def three_statement_command(splitted_input)
+    slot_num = parking_lot.available_slot
+
+    park_check(reg_no: splitted_input[1],
+               color: splitted_input[2],
+               slot_num: slot_num)
+  end
+
   def parse_user_input
     splitted_input = input.split
     if splitted_input.size == 1
       print_table
     elsif splitted_input.size == 2
-      if splitted_input[0] == 'create_parking_lot'
-        create_parking_lot(splitted_input)
-        size = splitted_input[1]
-        print_result('Created a parking lot with ' + size + ' slots')
-      elsif splitted_input[0] == 'leave'
-        leave_process(splitted_input[1])
-      elsif splitted_input[0] == 'registration_numbers_for_cars_with_colour'
-        result = registration_numbers_by_color(splitted_input[1])
-        print_result result
-      elsif splitted_input[0] == 'slot_numbers_for_cars_with_colour'
-        result = slot_numbers_by_color(splitted_input[1])
-        print_result result
-      elsif splitted_input[0] == 'slot_number_for_registration_number'
-        result = slot_num_by_registration_number(splitted_input[1])
-        print_result result
-      end
+      two_statement_command(splitted_input)
     elsif splitted_input.size == 3
-      slot_num = parking_lot.available_slot
-      park_check(reg_no: splitted_input[1],
-                 color: splitted_input[2],
-                 slot_num: slot_num)
+      three_statement_command(splitted_input)
     end
   end
 

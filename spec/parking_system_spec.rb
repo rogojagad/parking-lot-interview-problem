@@ -7,6 +7,7 @@ RSpec.describe ParkingSystem do
     context 'system argument given' do
       it 'runs in file mode' do
         ARGV.replace ['filename']
+        expect(parking_system).to receive(:set_input_path).with('filename')
         expect(parking_system).to receive(:file_mode)
         parking_system.run
       end
@@ -72,20 +73,21 @@ RSpec.describe ParkingSystem do
 
   describe '#create_parking_lot' do
     it 'create new parking lot with given size' do
-      input = %w[create_parking_lot 5]
+      input = 5
+      parking_lot = instance_double ParkingLot
+      allow(parking_system).to receive(:str_to_int).with(input.to_s)
+                                                   .and_return(input)
+      expect(ParkingLot).to receive(:new).with(input).and_return(parking_lot)
 
-      allow(parking_system).to receive(:str_to_int).with(input[1])
-                                                   .and_return(5)
+      parking_system.create_parking_lot(input.to_s)
 
-      parking_system.create_parking_lot(input)
-
-      expect(parking_system.parking_lot.slots.size).to eq(5)
+      expect(parking_system.parking_lot).to eq(parking_lot)
     end
   end
 
   describe '#leave_park_slot' do
     it 'deletes car on the corresponding slot' do
-      parking_lot = double
+      parking_lot = instance_double ParkingLot
       slot_num = Random.rand(1..10)
 
       allow(parking_system).to receive(:parking_lot)
@@ -109,7 +111,7 @@ RSpec.describe ParkingSystem do
   end
 
   describe '#registration_numbers_by_color' do
-    it 'retrieve reg_number of cars with corresponding color' do
+    it 'retrieve reg_number of cars with corresponding color then compact_to_string' do
       array = [
         'b 1234 a',
         'c 2345 b',
@@ -181,7 +183,7 @@ RSpec.describe ParkingSystem do
 
         allow(parking_system).to receive(:parking_lot)
           .and_return(parking_lot)
-        allow(parking_lot).to receive(:get_slot_num_by_reg_no)
+        expect(parking_lot).to receive(:get_slot_num_by_reg_no)
           .with(reg_no)
           .and_return(slot_num)
 
@@ -271,6 +273,92 @@ RSpec.describe ParkingSystem do
         .exactly(3).times
 
       parking_system.file_mode
+    end
+  end
+
+  describe '#two_statement_command' do
+    let(:size) { Random.rand(3..10) }
+    let(:color) { 'blue' }
+    let(:reg_number) { 'qwe123' }
+    let(:slot_number) { Random.rand(3..10) }
+
+    context 'create_parking_lot' do
+      it 'creates parking lot instance' do
+        input = ['create_parking_lot', size]
+
+        expect(parking_system).to receive(:create_parking_lot).with(size)
+        expect(parking_system).to receive(:print_result)
+          .with('Created a parking lot with ' + size.to_s + ' slots')
+
+        parking_system.two_statement_command(input)
+      end
+    end
+
+    context '#leave' do
+      it 'empty slot with corresponding number' do
+        num = 3
+        input = ['leave', num]
+
+        expect(parking_system).to receive(:leave_process).with(num)
+
+        parking_system.two_statement_command(input)
+      end
+    end
+
+    context '#registration_numbers_for_cars_with_colour' do
+      it 'calls registration_numbers_by_colour' do
+        result = reg_number
+        input = ['registration_numbers_for_cars_with_colour', color]
+
+        expect(parking_system).to receive(:registration_numbers_by_color)
+          .with(color).and_return(result)
+        expect(parking_system).to receive(:print_result).with(result)
+
+        parking_system.two_statement_command(input)
+      end
+    end
+
+    context 'slot_numbers_for_cars_with_colour' do
+      it 'calls slot_numbers_by_color' do
+        result = slot_number
+        input = ['slot_numbers_for_cars_with_colour', color]
+
+        expect(parking_system).to receive(:slot_numbers_by_color)
+          .with(color).and_return(result)
+        expect(parking_system).to receive(:print_result).with(result)
+
+        parking_system.two_statement_command(input)
+      end
+    end
+
+    context 'slot_number_for_registration_number' do
+      it 'calls slot_num_by_registration_number' do
+        result = slot_number
+
+        input = ['slot_number_for_registration_number', reg_number]
+
+        expect(parking_system).to receive(:slot_num_by_registration_number)
+          .with(reg_number).and_return(result)
+        expect(parking_system).to receive(:print_result).with(result)
+
+        parking_system.two_statement_command(input)
+      end
+    end
+  end
+
+  describe '#three_statement_command' do
+    it 'parses command with 3 components' do
+      parking_lot = instance_double ParkingLot
+      slot_num = Random.rand(1..10)
+      input = %w[park qwe123 red]
+
+      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
+      allow(parking_lot).to receive(:available_slot).and_return(slot_num)
+
+      expect(parking_system).to receive(:park_check)
+        .with(reg_no: input[1], color: input[2], slot_num: slot_num)
+
+      parking_system.three_statement_command input
     end
   end
 end

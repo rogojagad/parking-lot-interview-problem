@@ -1,6 +1,7 @@
 
 # Created by https://www.gitignore.io/api/c,ruby
 
+.idea
 ### C ###
 # Prerequisites
 *.d
@@ -109,4 +110,3 @@ build-iPhoneSimulator/
 
 
 # End of https://www.gitignore.io/api/c,ruby
-
