@@ -1,6 +1,28 @@
 # Parking Lot
 Made by Rogo Jagad Alit, Informatics Departement batch 2015 for Mapan.id Internship test
 
+# Directory Structure
+```
+.
++-- lib
+|		+-- car.rb
+|		+-- main.rb
+|		+-- parking_lot.rb
+|		+-- parking_system.rb
++-- spec
+|		+-- parking_lot_spec.rb
+|		+-- parking_system_spec.rb
+|		+-- spec_helper.rb
++-- .gitignore
++-- .rspec
++-- file_inputs.txt
++-- Gemfile
++-- Gemfile.lock
++-- parking_lot
++-- parking_lot.c
++-- readme.md
+```
+
 # How to Run
 This solution is using Ruby programming language and RSpec gem for unit testing.
 
