@@ -1,6 +1,3 @@
-# Parking Lot
-Made by Rogo Jagad Alit, Informatics Departement batch 2015 for Mapan.id Internship test
-
 ## Directory Structure
 ```
 .
