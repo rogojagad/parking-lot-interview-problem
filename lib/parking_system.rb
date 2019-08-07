@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ParkingSystem
   attr_accessor :parking_lot
   attr_reader :input, :input_path
@@ -60,6 +62,7 @@ class ParkingSystem
   def slot_num_by_registration_number(reg_no)
     slot_num = parking_lot.get_slot_num_by_reg_no(reg_no)
     return 'Not found' unless slot_num
+
     slot_num.to_s
   end
 
@@ -68,6 +71,7 @@ class ParkingSystem
     puts "Slot No.\tRegistration No.\tColour"
     parking_slots.each_with_index do |slot, idx|
       next unless slot
+
       output = (idx + 1).to_s + "\t\t" + slot.reg_no + "\t\t" + slot.color
       puts output
     end
