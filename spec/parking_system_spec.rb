@@ -86,7 +86,7 @@ RSpec.describe ParkingSystem do
   end
 
   describe '#leave_park_slot' do
-    it 'deletes car on the corresponding slot' do
+    it 'empties the corresponding slot' do
       parking_lot = instance_double ParkingLot
       slot_num = Random.rand(1..10)
 
@@ -99,7 +99,7 @@ RSpec.describe ParkingSystem do
   end
 
   describe '#leave_process' do
-    it 'check condition to leave parking slot properly' do
+    it 'runs leaving parking slot process properly' do
       allow(parking_system).to receive(:str_to_int).with('5')
                                                    .and_return(5)
       expect(parking_system).to receive(:leave_park_slot).with(4)
