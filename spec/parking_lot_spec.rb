@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe ParkingLot do
@@ -63,12 +65,10 @@ RSpec.describe ParkingLot do
     let(:car1) { instance_double Car }
     let(:car2) { instance_double Car }
     let(:car3) { instance_double Car }
-    #
     before do
       allow(car1).to receive(:reg_no).and_return('qwe')
       allow(car2).to receive(:reg_no).and_return('asd')
       allow(car3).to receive(:reg_no).and_return('zxc')
-      #
       allow(car1).to receive(:color).and_return('white')
       allow(car2).to receive(:color).and_return('black')
       allow(car3).to receive(:color).and_return('white')
@@ -89,12 +89,10 @@ RSpec.describe ParkingLot do
     let(:car2) { instance_double Car }
     let(:car3) { instance_double Car }
     let(:slots) { [car1, car2, car3] }
-    #
     before do
       allow(car1).to receive(:reg_no).and_return('qwe')
       allow(car2).to receive(:reg_no).and_return('asd')
       allow(car3).to receive(:reg_no).and_return('zxc')
-      #
       allow(car1).to receive(:color).and_return('white')
       allow(car2).to receive(:color).and_return('black')
       allow(car3).to receive(:color).and_return('white')
@@ -122,12 +120,10 @@ RSpec.describe ParkingLot do
     let(:car2) { instance_double Car }
     let(:car3) { instance_double Car }
     let(:slots) { [car1, car2, car3] }
-    #
     before do
       allow(car1).to receive(:reg_no).and_return('qwe')
       allow(car2).to receive(:reg_no).and_return('asd')
       allow(car3).to receive(:reg_no).and_return('zxc')
-      #
       allow(car1).to receive(:color).and_return('white')
       allow(car2).to receive(:color).and_return('black')
       allow(car3).to receive(:color).and_return('white')
@@ -135,12 +131,22 @@ RSpec.describe ParkingLot do
       allow(parking_lot).to receive(:slots).and_return(slots)
     end
 
-    it 'returns array of slot number' do
-      expected_array = %w[1 3]
+    context 'car with this color exists' do
+      it 'returns array of slot number' do
+        expected_array = %w[1 3]
 
-      result = parking_lot.get_slot_num_by_color 'white'
+        result = parking_lot.get_slot_num_by_color 'white'
 
-      expect(result).to eq(expected_array)
+        expect(result).to eq(expected_array)
+      end
+    end
+
+    context 'car with this color does not exist' do
+      it 'returns empty array' do
+        result = parking_lot.get_slot_num_by_color 'purple'
+
+        expect(result.size).to eq(0)
+      end
     end
   end
 end
