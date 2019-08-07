@@ -89,10 +89,12 @@ RSpec.describe ParkingLot do
     let(:car2) { instance_double Car }
     let(:car3) { instance_double Car }
     let(:slots) { [car1, car2, car3] }
+
     before do
       allow(car1).to receive(:reg_no).and_return('qwe')
       allow(car2).to receive(:reg_no).and_return('asd')
       allow(car3).to receive(:reg_no).and_return('zxc')
+
       allow(car1).to receive(:color).and_return('white')
       allow(car2).to receive(:color).and_return('black')
       allow(car3).to receive(:color).and_return('white')
@@ -120,10 +122,12 @@ RSpec.describe ParkingLot do
     let(:car2) { instance_double Car }
     let(:car3) { instance_double Car }
     let(:slots) { [car1, car2, car3] }
+
     before do
       allow(car1).to receive(:reg_no).and_return('qwe')
       allow(car2).to receive(:reg_no).and_return('asd')
       allow(car3).to receive(:reg_no).and_return('zxc')
+
       allow(car1).to receive(:color).and_return('white')
       allow(car2).to receive(:color).and_return('black')
       allow(car3).to receive(:color).and_return('white')
