@@ -1,6 +1,6 @@
 
 # Created by https://www.gitignore.io/api/c,ruby
-
+.vscode
 .idea
 ### C ###
 # Prerequisites
