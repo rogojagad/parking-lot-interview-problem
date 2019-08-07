@@ -1,40 +1,50 @@
 # Parking Lot
-Made by Rogo Jagad Alit, Informatics Departement batch 2015 for Mapan.id Internship test
+Made by Rogo Jagad Alit, Informatics Departement Institut Teknologi Sepuluh Nopember batch 2015 for Go-Life Backend Engineer application test.
 
 ## Directory Structure
 ```
 .
-+-- lib
-|  +-- car.rb
-|  +-- main.rb
-|  +-- parking_lot.rb
-|  +-- parking_system.rb
-+-- spec
-|  +-- parking_lot_spec.rb
-|  +-- parking_system_spec.rb
-|  +-- spec_helper.rb
-+-- .gitignore
-+-- .rspec
-+-- file_inputs.txt
-+-- Gemfile
-+-- Gemfile.lock
-+-- parking_lot
-+-- parking_lot.c
-+-- readme.md
+├── bin
+│   ├── parking_lot
+│   ├── parking_lot.c
+│   ├── setup
+│   └── setup.c
+├── file_inputs.txt
+├── functional_spec
+│   ├── fixtures
+│   │   └── file_input.txt
+│   ├── Gemfile
+│   ├── Gemfile.lock
+│   ├── Rakefile
+│   ├── README.md
+│   └── spec
+│       ├── end_to_end_spec.rb
+│       ├── parking_lot_spec.rb
+│       └── spec_helper.rb
+├── Gemfile
+├── Gemfile.lock
+├── lib
+│   ├── car.rb
+│   ├── dependencies.rb
+│   ├── main.rb
+│   ├── parking_lot.rb
+│   └── parking_system.rb
+├── readme.md
+└── spec
+    ├── parking_lot_spec.rb
+    ├── parking_system_spec.rb
+    └── spec_helper.rb
 ```
 
 ## How to Run
 This solution is using Ruby programming language and RSpec gem for unit testing.
 
 
-Make sure you have install Bundle in your testing environment.
-
-* run `bundle install` to install needed gem listed in `Gemfile` file
-* run `rspec --init` in the root project directory to initialize the RSpec gem
-* add `require_relative '../lib/dependencies'` in `spec/spec_helper.rb` just before `RSpec.configure do |config|`
-* run the `parking_lot` executable to run the test, then run the solution
-* run `./parking_lot` (wihout system parameter) to run solution in interactive mode
-* run `./parking_lot [input filename]` to run solution in file mode
+Following are some instructions on how to run the solution:
+* run `gem install bundle` to install `bundle` gem in your environment
+* run `bin/setup` to install needed gem listed in `Gemfile` file and run the unit test.
+* run the `bin/parking_lot {input file name}` in terminal to run the solution in file mode. Ex: `bin/parking_lot file_inputs.txt` to run the solution using `file_inputs.txt` as input source.
+* run `bin/parking_lot` (wihout input file name) to run solution in interactive mode
 
 
 ## Problem Statement
