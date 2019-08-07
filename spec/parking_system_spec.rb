@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe ParkingSystem do
@@ -30,6 +32,43 @@ RSpec.describe ParkingSystem do
       parking_system.receive_user_input
 
       expect(parking_system.input).to eq(input_command)
+    end
+  end
+
+  describe '#parse_user_input' do
+    let(:input) { double }
+
+    before do
+      allow(parking_system).to receive(:input).and_return(input)
+    end
+
+    context 'one statement command' do
+      it 'calls print_table' do
+        allow(input).to receive(:split).and_return(['command1'])
+
+        expect(parking_system).to receive(:print_table)
+      end
+    end
+
+    context 'two statement command' do
+      it 'calls two_statement_command parser function' do
+        allow(input).to receive(:split).and_return(%w[command1 command2])
+
+        expect(parking_system).to receive(:two_statement_command)
+      end
+    end
+
+    context 'three statement command' do
+      it 'calls three_statement_command parser function' do
+        allow(input).to receive(:split)
+          .and_return(%w[command1 command2 command3])
+
+        expect(parking_system).to receive(:three_statement_command)
+      end
+    end
+
+    after do
+      parking_system.parse_user_input
     end
   end
 
