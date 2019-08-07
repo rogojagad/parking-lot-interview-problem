@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class ParkingSystem
-  attr_accessor :parking_lot
-  attr_reader :input, :input_path
+  attr_reader :input, :input_path, :parking_lot
 
   def receive_user_input
     @input = STDIN.gets.strip

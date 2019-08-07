@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class ParkingLot
-  attr_accessor :slots
+  attr_reader :slots
   def initialize(size)
     @slots = Array.new(size)
   end
@@ -24,6 +26,7 @@ class ParkingLot
     result = []
     slots.each do |slot|
       next unless slot
+
       result << slot.reg_no if slot.color == color
     end
 
