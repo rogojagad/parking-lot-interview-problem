@@ -33,7 +33,7 @@ RSpec.describe Utilities do
     end
 
     context 'string unconvertable to int number' do
-      it 'return int number' do
+      it 'return nil' do
         expect(utilities.to_int_or_nil('one')).to eq(nil)
       end
     end
