@@ -48,19 +48,15 @@ class ParkingSystem
     parking_lot.park(car: car, slot_num: slot_num)
   end
 
-  def park_check(reg_no:, color:, slot_num:)
-    if slot_num
-      park_on_slot(reg_no: reg_no, color: color, slot_num: slot_num)
-      utilities.print_result 'Allocated slot number: ' + (slot_num + 1).to_s
-    else
-      utilities.print_result 'Sorry, parking lot is full'
-    end
+  def park_process(reg_no:, color:, slot_num:)
+    park_on_slot(reg_no: reg_no, color: color, slot_num: slot_num)
+    utilities.print_result 'Allocated slot number: ' + (slot_num + 1).to_s
   end
 
   def leave_process(num_in_str)
     num_in_int = str_to_int(num_in_str)
     leave_park_slot(num_in_int - 1)
-    utilities.print_result('Slot number ' + num_in_str + ' is free')
+    utilities.print_result 'Slot number ' + num_in_str + ' is free'
   end
 
   def two_statement_command(splitted_input)
@@ -82,12 +78,16 @@ class ParkingSystem
     end
   end
 
-  def three_statement_command(splitted_input)
+  def check_and_park(splitted_input)
     slot_num = parking_lot.available_slot
 
-    park_check(reg_no: splitted_input[1],
-               color: splitted_input[2],
-               slot_num: slot_num)
+    if slot_num
+      park_process(reg_no: splitted_input[1],
+                   color: splitted_input[2],
+                   slot_num: slot_num)
+    else
+      utilities.print_result 'Sorry, parking lot is full'
+    end
   end
 
   def parse_user_input(input)
@@ -95,9 +95,9 @@ class ParkingSystem
     if splitted_input.size == 1
       utilities.print_table parking_lot.slots
     elsif splitted_input.size == 2
-      two_statement_command(splitted_input)
+      two_statement_command splitted_input
     elsif splitted_input.size == 3
-      three_statement_command(splitted_input)
+      check_and_park splitted_input
     end
   end
 

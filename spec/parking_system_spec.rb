@@ -59,11 +59,11 @@ RSpec.describe ParkingSystem do
     end
 
     context 'three statement command' do
-      it 'calls three_statement_command parser function' do
+      it 'calls park_process parser function' do
         allow(input).to receive(:split)
           .and_return(%w[command1 command2 command3])
 
-        expect(parking_system).to receive(:three_statement_command)
+        expect(parking_system).to receive(:check_and_park)
       end
     end
 
@@ -238,39 +238,38 @@ RSpec.describe ParkingSystem do
     end
   end
 
-  describe '#park_check' do
+  describe '#check_and_park' do
     let(:reg_no) { 'qwe' }
     let(:color) { 'blue' }
+    let(:slot_num) { slot_num = Random.rand(1..10) }
+    let(:parking_lot) { instance_double ParkingLot }
 
     before do
-      expect(parking_system).to receive(:utilities).and_return(utilities)
+      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
     end
 
     context 'slot available' do
-      it 'parks car' do
-        slot_num = Random.rand(1..10)
+      it 'calls park process' do
+        allow(parking_lot).to receive(:available_slot).and_return(slot_num)
 
-        expect(parking_system).to receive(:park_on_slot)
-          .with(reg_no: reg_no, color: color, slot_num: slot_num)
-
-        expect(utilities).to receive(:print_result)
-          .with('Allocated slot number: ' + (slot_num + 1).to_s)
-
-        parking_system.park_check(reg_no: reg_no,
-                                  color: color,
-                                  slot_num: slot_num)
+        expect(parking_system).to receive(:park_process).with(reg_no: reg_no,
+                                                              color: color,
+                                                              slot_num: slot_num)
       end
     end
 
     context 'slot unavailable' do
-      it 'prints not found message' do
+      it 'calls print_result with prints not found message' do
+        allow(parking_lot).to receive(:available_slot).and_return(nil)
+        allow(parking_system).to receive(:utilities).and_return(utilities)
+
         expect(utilities).to receive(:print_result)
           .with('Sorry, parking lot is full')
-
-        parking_system.park_check(reg_no: reg_no,
-                                  color: color,
-                                  slot_num: nil)
       end
+    end
+
+    after do
+      parking_system.check_and_park(['park', reg_no, color])
     end
   end
 
@@ -365,19 +364,26 @@ RSpec.describe ParkingSystem do
     end
   end
 
-  describe '#three_statement_command' do
-    it 'parses command with 3 components' do
-      parking_lot = instance_double ParkingLot
+  describe '#park_process' do
+    it 'parks a car and print allocated slot number' do
+      reg_no = 'asd'
+      color = 'maroon'
       slot_num = Random.rand(1..10)
-      input = %w[park qwe123 red]
 
-      allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
-      allow(parking_lot).to receive(:available_slot).and_return(slot_num)
+      expect(parking_system).to receive(:park_on_slot).with(
+        reg_no: reg_no,
+        color: color,
+        slot_num: slot_num
+      )
 
-      expect(parking_system).to receive(:park_check)
-        .with(reg_no: input[1], color: input[2], slot_num: slot_num)
+      allow(parking_system).to receive(:utilities).and_return(utilities)
 
-      parking_system.three_statement_command input
+      expect(utilities).to receive(:print_result)
+        .with('Allocated slot number: ' + (slot_num + 1).to_s)
+
+      parking_system.park_process(reg_no: reg_no,
+                                  color: color,
+                                  slot_num: slot_num)
     end
   end
 end
