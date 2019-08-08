@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ParkingSystem
-  attr_reader :input, :input_path, :parking_lot, :utilities
+  attr_reader :input_path, :parking_lot, :utilities
 
   def initialize(utilities)
     @utilities = utilities
@@ -90,7 +90,7 @@ class ParkingSystem
                slot_num: slot_num)
   end
 
-  def parse_user_input
+  def parse_user_input(input)
     splitted_input = input.split
     if splitted_input.size == 1
       utilities.print_table parking_lot.slots
@@ -102,15 +102,16 @@ class ParkingSystem
   end
 
   def interactive_mode
-    parse_user_input while utilities.receive_user_input
+    loop do
+      parse_user_input utilities.receive_user_input
+    end
   end
 
   def file_mode
     input_file = File.open(input_path, 'r')
 
     input_file.each_line do |line|
-      @input = line
-      parse_user_input
+      parse_user_input line
     end
   end
 
@@ -133,7 +134,7 @@ class ParkingSystem
   end
 
   def set_input_path(filename)
-    @input_path = File.join(File.dirname(__FILE__), '../' + filename)
+    @input_path = filename
     # puts @input_path
   end
 end

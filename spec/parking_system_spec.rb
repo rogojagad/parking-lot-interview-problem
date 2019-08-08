@@ -36,10 +36,6 @@ RSpec.describe ParkingSystem do
   describe '#parse_user_input' do
     let(:input) { double }
 
-    before do
-      allow(parking_system).to receive(:input).and_return(input)
-    end
-
     context 'one statement command' do
       it 'prints result in table format' do
         parking_lot = instance_double ParkingLot
@@ -72,7 +68,7 @@ RSpec.describe ParkingSystem do
     end
 
     after do
-      parking_system.parse_user_input
+      parking_system.parse_user_input input
     end
   end
 
