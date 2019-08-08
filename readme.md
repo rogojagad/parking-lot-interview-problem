@@ -1,5 +1,7 @@
 # Parking Lot
+___
 Made by Rogo Jagad Alit, Informatics Departement Institut Teknologi Sepuluh Nopember batch 2015 for Go-Life Backend Engineer application test.
+
 
 ## Directory Structure
 ```
@@ -41,7 +43,8 @@ Made by Rogo Jagad Alit, Informatics Departement Institut Teknologi Sepuluh Nope
 ```
 
 ## How to Run
-The solution source code is in `lib` folder and the unit test for the solution is in `spec` folder.
+The solution source code is in `lib`
+ and the unit test for the solution is in `spec` folder.
 
 This solution is using Ruby programming language and RSpec gem for unit testing.
 
@@ -51,6 +54,15 @@ Following are some instructions on how to run the solution:
 * run the `bin/parking_lot {input file name}` in terminal to run the solution in file mode. Ex: `bin/parking_lot file_inputs.txt` to run the solution using `file_inputs.txt` as input source.
 * run `bin/parking_lot` (wihout input file name) to run solution in interactive mode
 
+## Class
+Following are brief explanations of each class on this solution:
+* **Car** : Implemented on `lib\car.rb` to represent Car which is parked on the parking lot. This class store the color and registration number of each car.
+
+* **ParkingLot** : Implemented on `lib\parking_lot.rb` as Parking Lot area on which the Car is parked. This class uses array as the parking slot and implement the logic to park a car on certain slot, to look for cars with certain category (registration number or color) and to remove car from certain parking slot.
+
+* **ParkingSystem** : Implemented on `lib\parking_system.rb`. This class act as interface between the user and the `Parking Lot`. This class uses `Utilities` class as a module to receive user's command and print the requested data to user on proper format. The processed user input is parsed then proper function matched user's query is called.
+
+* **Utilities** : Implemented on `lib\utilities.rb`. This class receives and process user's command so it can be parsed by `ParkingSystem`. This class also used to format and print returned value,
 
 ## Problem Statement
 I own a multi-storey parking lot that can hold up to 'n' cars at any given point in time.
