@@ -60,7 +60,7 @@ Following are brief explanations of each class on this solution:
 
 * **ParkingLot** : Implemented on `lib\parking_lot.rb` as Parking Lot area on which the Car is parked. This class uses array as the parking slot and implement the logic to park a car on certain slot, to look for cars with certain category (registration number or color) and to remove car from certain parking slot.
 
-* **ParkingSystem** : Implemented on `lib\parking_system.rb`. This class act as interface between the user and the `Parking Lot`. This class uses `Utilities` class as a module to receive user's command and print the requested data to user on proper format. The processed user input is parsed then proper function matched user's query is called.
+* **ParkingSystem** : Implemented on `lib\parking_system.rb`. This class act as interface between the user and the `ParkingLot`. This class uses `Utilities` class as a module to receive user's command and print the requested data to user on proper format. The processed user input is parsed then proper function matched user's query is called.
 
 * **Utilities** : Implemented on `lib\utilities.rb`. This class receives and process user's command so it can be parsed by `ParkingSystem`. This class also used to format and print returned value,
 
