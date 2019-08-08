@@ -6,9 +6,8 @@ Made by Rogo Jagad Alit, Informatics Departement Institut Teknologi Sepuluh Nope
 .
 ├── bin
 │   ├── parking_lot
-│   ├── parking_lot.c
-│   ├── setup
-│   └── setup.c
+│   ├── run_functional_tests
+│   └── setup
 ├── file_inputs.txt
 ├── functional_spec
 │   ├── fixtures
@@ -28,20 +27,26 @@ Made by Rogo Jagad Alit, Informatics Departement Institut Teknologi Sepuluh Nope
 │   ├── dependencies.rb
 │   ├── main.rb
 │   ├── parking_lot.rb
-│   └── parking_system.rb
+│   ├── parking_system.rb
+│   └── utilities.rb
+├── parking_lot
 ├── readme.md
 └── spec
+    ├── car_spec.rb
     ├── parking_lot_spec.rb
     ├── parking_system_spec.rb
-    └── spec_helper.rb
+    ├── spec_helper.rb
+    └── utilities_spec.rb
+
 ```
 
 ## How to Run
+The solution source code is in `lib` folder and the unit test for the solution is in `spec` folder.
+
 This solution is using Ruby programming language and RSpec gem for unit testing.
 
-
 Following are some instructions on how to run the solution:
-* run `gem install bundle` to install `bundle` gem in your environment
+* run `gem install bundle` on root directory to install `bundle` gem in your environment
 * run `bin/setup` to install needed gem listed in `Gemfile` file and run the unit test.
 * run the `bin/parking_lot {input file name}` in terminal to run the solution in file mode. Ex: `bin/parking_lot file_inputs.txt` to run the solution using `file_inputs.txt` as input source.
 * run `bin/parking_lot` (wihout input file name) to run solution in interactive mode
