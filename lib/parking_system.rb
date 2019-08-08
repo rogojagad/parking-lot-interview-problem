@@ -1,42 +1,20 @@
 # frozen_string_literal: true
 
 class ParkingSystem
-  attr_reader :input, :input_path, :parking_lot
+  attr_reader :input, :input_path, :parking_lot, :utilities
 
-  def receive_user_input
-    @input = STDIN.gets.strip
+  def initialize(utilities)
+    @utilities = utilities
   end
 
   def leave_park_slot(slot_num)
     parking_lot.leave slot_num
   end
 
-  def print_result(output)
-    puts output
-  end
-
-  def to_num_or_nil(string)
-    Integer(string || '')
-  rescue ArgumentError
-    nil
-  end
-
   def str_to_int(num_in_str)
-    num_in_int = to_num_or_nil(num_in_str)
+    num_in_int = utilities.to_int_or_nil(num_in_str)
     exit_execution unless num_in_int
     num_in_int
-  end
-
-  def compact_to_string(size, array)
-    result_string = ''
-
-    array.each_with_index do |result, idx|
-      result_string += result
-
-      result_string += ', ' if idx != size - 1
-    end
-
-    result_string
   end
 
   def create_parking_lot(size_in_str)
@@ -49,13 +27,13 @@ class ParkingSystem
 
     size = results.size
 
-    compact_to_string(size, results)
+    utilities.compact_to_string(results)
   end
 
   def slot_numbers_by_color(color)
     result = parking_lot.get_slot_num_by_color color
     size = result.size
-    compact_to_string(size, result)
+    utilities.compact_to_string(result)
   end
 
   def slot_num_by_registration_number(reg_no)
@@ -63,17 +41,6 @@ class ParkingSystem
     return 'Not found' unless slot_num
 
     slot_num.to_s
-  end
-
-  def print_table
-    parking_slots = parking_lot.slots
-    puts "Slot No.\tRegistration No.\tColour"
-    parking_slots.each_with_index do |slot, idx|
-      next unless slot
-
-      output = (idx + 1).to_s + "\t\t" + slot.reg_no + "\t\t" + slot.color
-      puts output
-    end
   end
 
   def park_on_slot(reg_no:, color:, slot_num:)
@@ -84,34 +51,34 @@ class ParkingSystem
   def park_check(reg_no:, color:, slot_num:)
     if slot_num
       park_on_slot(reg_no: reg_no, color: color, slot_num: slot_num)
-      print_result 'Allocated slot number: ' + (slot_num + 1).to_s
+      utilities.print_result 'Allocated slot number: ' + (slot_num + 1).to_s
     else
-      print_result 'Sorry, parking lot is full'
+      utilities.print_result 'Sorry, parking lot is full'
     end
   end
 
   def leave_process(num_in_str)
     num_in_int = str_to_int(num_in_str)
     leave_park_slot(num_in_int - 1)
-    print_result('Slot number ' + num_in_str + ' is free')
+    utilities.print_result('Slot number ' + num_in_str + ' is free')
   end
 
   def two_statement_command(splitted_input)
     if splitted_input[0] == 'create_parking_lot'
       size = splitted_input[1]
       create_parking_lot(size)
-      print_result('Created a parking lot with ' + size.to_s + ' slots')
+      utilities.print_result('Created a parking lot with ' + size.to_s + ' slots')
     elsif splitted_input[0] == 'leave'
       leave_process(splitted_input[1])
     elsif splitted_input[0] == 'registration_numbers_for_cars_with_colour'
       result = registration_numbers_by_color(splitted_input[1])
-      print_result result
+      utilities.print_result result
     elsif splitted_input[0] == 'slot_numbers_for_cars_with_colour'
       result = slot_numbers_by_color(splitted_input[1])
-      print_result result
+      utilities.print_result result
     elsif splitted_input[0] == 'slot_number_for_registration_number'
       result = slot_num_by_registration_number(splitted_input[1])
-      print_result result
+      utilities.print_result result
     end
   end
 
@@ -126,7 +93,7 @@ class ParkingSystem
   def parse_user_input
     splitted_input = input.split
     if splitted_input.size == 1
-      print_table
+      utilities.print_table parking_lot.slots
     elsif splitted_input.size == 2
       two_statement_command(splitted_input)
     elsif splitted_input.size == 3
@@ -135,7 +102,7 @@ class ParkingSystem
   end
 
   def interactive_mode
-    parse_user_input while receive_user_input
+    parse_user_input while utilities.receive_user_input
   end
 
   def file_mode
@@ -161,7 +128,7 @@ class ParkingSystem
   private
 
   def exit_execution
-    print_result 'Argument is not integer, check again'
+    utilities.print_result 'Argument is not integer, check again'
     exit 1
   end
 

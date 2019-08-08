@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'dependencies'
 
-ParkingSystem.new.run
+ParkingSystem.new(Utilities.new).run
