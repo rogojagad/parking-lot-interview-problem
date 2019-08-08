@@ -71,12 +71,12 @@ RSpec.describe Utilities do
     end
 
     it 'prints array of Car object in proper string format' do
-      table_format = "Slot No.\tRegistration No.\tColour"
+      table_format = "Slot No.    Registration No    Colour\n"
 
       slots.each_with_index do |slot, idx|
         next unless slot
 
-        table_format += (idx + 1).to_s + "\t\t" + slot.reg_no + "\t\t" + slot.color
+        table_format += (idx + 1).to_s + '           ' + slot.reg_no + '      ' + slot.color
         table_format += "\n"
       end
 
