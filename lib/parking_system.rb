@@ -24,16 +24,12 @@ class ParkingSystem
 
   def registration_numbers_by_color(color)
     results = parking_lot.get_reg_numbers_by_color(color)
-
-    size = results.size
-
     utilities.compact_to_string(results)
   end
 
   def slot_numbers_by_color(color)
-    result = parking_lot.get_slot_num_by_color color
-    size = result.size
-    utilities.compact_to_string(result)
+    results = parking_lot.get_slot_num_by_color(color)
+    utilities.compact_to_string(results)
   end
 
   def slot_num_by_registration_number(reg_no)
