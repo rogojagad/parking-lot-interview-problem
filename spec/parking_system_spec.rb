@@ -8,8 +8,6 @@ RSpec.describe ParkingSystem do
 
   describe '#initialize and attr_reader' do
     it 'has Utilities object as attribute' do
-      parking_system = ParkingSystem.new utilities
-
       expect(parking_system.utilities).to eq(utilities)
     end
   end
@@ -37,7 +35,7 @@ RSpec.describe ParkingSystem do
     let(:input) { double }
 
     context 'one statement command' do
-      it 'prints result in table format' do
+      it 'prints report in table format' do
         parking_lot = instance_double ParkingLot
         slots = %w[aaa www]
 
@@ -45,7 +43,7 @@ RSpec.describe ParkingSystem do
         allow(parking_system).to receive(:parking_lot).and_return(parking_lot)
         allow(parking_lot).to receive(:slots).and_return(slots)
 
-        expect(parking_system).to receive(:utilities).and_return(utilities)
+        allow(parking_system).to receive(:utilities).and_return(utilities)
         expect(utilities).to receive(:print_table).with(slots)
       end
     end
@@ -55,6 +53,7 @@ RSpec.describe ParkingSystem do
         allow(input).to receive(:split).and_return(%w[command1 command2])
 
         expect(parking_system).to receive(:two_statement_command)
+          .with(%w[command1 command2])
       end
     end
 
@@ -64,6 +63,7 @@ RSpec.describe ParkingSystem do
           .and_return(%w[command1 command2 command3])
 
         expect(parking_system).to receive(:check_and_park)
+          .with(%w[command1 command2 command3])
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.describe ParkingSystem do
 
   describe 'str_to_int' do
     before do
-      expect(parking_system).to receive(:utilities).and_return(utilities)
+      allow(parking_system).to receive(:utilities).and_return(utilities)
     end
 
     context 'given string is convertable to int' do
@@ -95,7 +95,7 @@ RSpec.describe ParkingSystem do
 
   describe '#create_parking_lot' do
     it 'create new parking lot with given size' do
-      input = 5
+      input = Random.rand(1..10)
       parking_lot = instance_double ParkingLot
       allow(parking_system).to receive(:str_to_int).with(input.to_s)
                                                    .and_return(input)
@@ -121,14 +121,10 @@ RSpec.describe ParkingSystem do
   end
 
   describe '#leave_process' do
-    before do
-      allow(parking_system).to receive(:str_to_int).with('5')
-                                                   .and_return(5)
-    end
-
     it 'runs leaving parking slot process properly' do
+      expect(parking_system).to receive(:str_to_int).with('5').and_return(5)
       expect(parking_system).to receive(:leave_park_slot).with(4)
-      expect(parking_system).to receive(:utilities).and_return(utilities)
+      allow(parking_system).to receive(:utilities).and_return(utilities)
       expect(utilities).to receive(:print_result)
         .with('Slot number 5 is free')
 
@@ -137,23 +133,22 @@ RSpec.describe ParkingSystem do
   end
 
   describe '#registration_numbers_by_color' do
-    it 'retrieve reg_number of cars with corresponding color then compact_to_string' do
+    it 'retrieve reg_number of cars with corresponding color' do
       array = [
         'b 1234 a',
         'c 2345 b',
         'd 3456 d'
       ]
-      size = array.size
       parking_lot = double
       color = 'white'
 
       allow(parking_system).to receive(:parking_lot)
         .and_return(parking_lot)
-      allow(parking_lot).to receive(:get_reg_numbers_by_color)
+      expect(parking_lot).to receive(:get_reg_numbers_by_color)
         .with(color)
         .and_return(array)
 
-      expect(parking_system).to receive(:utilities).and_return(utilities)
+      allow(parking_system).to receive(:utilities).and_return(utilities)
       expect(utilities).to receive(:compact_to_string)
         .with(array)
 
@@ -164,17 +159,16 @@ RSpec.describe ParkingSystem do
   describe '#slot_numbers_by_color' do
     it 'retrieve slot number of cars with corresponding color' do
       array = [1, 3, 4]
-      size = array.size
       parking_lot = double
       color = 'white'
 
       allow(parking_system).to receive(:parking_lot)
         .and_return(parking_lot)
-      allow(parking_lot).to receive(:get_slot_num_by_color)
+      expect(parking_lot).to receive(:get_slot_num_by_color)
         .with(color)
         .and_return(array)
 
-      expect(parking_system).to receive(:utilities).and_return(utilities)
+      allow(parking_system).to receive(:utilities).and_return(utilities)
       expect(utilities).to receive(:compact_to_string)
         .with(array)
 
@@ -206,7 +200,7 @@ RSpec.describe ParkingSystem do
       it 'returns not found string' do
         allow(parking_system).to receive(:parking_lot)
           .and_return(parking_lot)
-        allow(parking_lot).to receive(:get_slot_num_by_reg_no)
+        expect(parking_lot).to receive(:get_slot_num_by_reg_no)
           .with(reg_no)
           .and_return(nil)
 
@@ -294,9 +288,9 @@ RSpec.describe ParkingSystem do
     let(:reg_number) { 'qwe123' }
     let(:slot_number) { Random.rand(3..10) }
 
-    context 'will call print_result from utilities' do
+    context 'will call print_result from Utilities' do
       before do
-        expect(parking_system).to receive(:utilities).and_return(utilities)
+        allow(parking_system).to receive(:utilities).and_return(utilities)
       end
 
       context 'create_parking_lot' do
