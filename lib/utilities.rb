@@ -15,6 +15,12 @@ class Utilities
     nil
   end
 
+  def str_to_int(num_in_str)
+    num_in_int = to_int_or_nil(num_in_str)
+    exit_execution unless num_in_int
+    num_in_int
+  end
+
   def compact_to_string(array)
     result_string = ''
     size = array.size
@@ -39,5 +45,12 @@ class Utilities
     end
 
     print_result table_format
+  end
+
+  private
+
+  def exit_execution
+    utilities.print_result 'Argument is not integer, check again'
+    exit 1
   end
 end
