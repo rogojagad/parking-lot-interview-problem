@@ -39,6 +39,23 @@ RSpec.describe Utilities do
     end
   end
 
+  describe 'str_to_int' do
+    context 'given string is convertable to int' do
+      it 'returns int number' do
+        expect(utilities).to receive(:to_int_or_nil).with('2').and_return(2)
+        expect(utilities.str_to_int('2')).to eq(2)
+      end
+    end
+
+    context 'given string is not convertable' do
+      it 'exit_execution' do
+        expect(utilities).to receive(:to_int_or_nil).with('two').and_return(nil)
+        expect(utilities).to receive(:exit_execution)
+        utilities.str_to_int('two')
+      end
+    end
+  end
+
   describe '#compact_to_string' do
     it 'converts given array to proper string format' do
       array = %w[
