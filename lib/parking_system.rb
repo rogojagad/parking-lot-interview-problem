@@ -1,42 +1,49 @@
 # frozen_string_literal: true
 
 class ParkingSystem
-  attr_reader :input_path, :parking_lot, :utilities
+  attr_reader :input_path, :parking_lot, :utilities, :command_to_func_hash
 
   def initialize(utilities)
     @utilities = utilities
+
+    @command_to_func_hash = {
+      create_parking_lot: method(:create_parking_lot),
+      leave: method(:leave_process),
+      registration_numbers_for_cars_with_colour: method(:registration_numbers_by_color),
+      slot_numbers_for_cars_with_colour: method(:slot_numbers_by_color),
+      slot_number_for_registration_number: method(:slot_num_by_registration_number)
+    }
   end
 
   def leave_park_slot(slot_num)
     parking_lot.leave slot_num
   end
 
-  def str_to_int(num_in_str)
-    num_in_int = utilities.to_int_or_nil(num_in_str)
-    exit_execution unless num_in_int
-    num_in_int
-  end
-
   def create_parking_lot(size_in_str)
-    size_in_int = str_to_int(size_in_str)
+    size_in_int = utilities.str_to_int size_in_str
     @parking_lot = ParkingLot.new(size_in_int)
+
+    utilities
+      .print_result('Created a parking lot with ' + size_in_str + ' slots')
   end
 
   def registration_numbers_by_color(color)
     results = parking_lot.get_reg_numbers_by_color(color)
-    utilities.compact_to_string(results)
+    results_in_str = utilities.compact_to_string(results)
+
+    utilities.print_result results_in_str
   end
 
   def slot_numbers_by_color(color)
     results = parking_lot.get_slot_num_by_color(color)
-    utilities.compact_to_string(results)
+    utilities.print_result utilities.compact_to_string(results)
   end
 
   def slot_num_by_registration_number(reg_no)
     slot_num = parking_lot.get_slot_num_by_reg_no(reg_no)
     return 'Not found' unless slot_num
 
-    slot_num.to_s
+    utilities.print_result slot_num.to_s
   end
 
   def park_on_slot(reg_no:, color:, slot_num:)
@@ -50,28 +57,13 @@ class ParkingSystem
   end
 
   def leave_process(num_in_str)
-    num_in_int = str_to_int(num_in_str)
+    num_in_int = utilities.str_to_int(num_in_str)
     leave_park_slot(num_in_int - 1)
     utilities.print_result 'Slot number ' + num_in_str + ' is free'
   end
 
   def two_statement_command(splitted_input)
-    if splitted_input[0] == 'create_parking_lot'
-      size = splitted_input[1]
-      create_parking_lot(size)
-      utilities.print_result('Created a parking lot with ' + size.to_s + ' slots')
-    elsif splitted_input[0] == 'leave'
-      leave_process(splitted_input[1])
-    elsif splitted_input[0] == 'registration_numbers_for_cars_with_colour'
-      result = registration_numbers_by_color(splitted_input[1])
-      utilities.print_result result
-    elsif splitted_input[0] == 'slot_numbers_for_cars_with_colour'
-      result = slot_numbers_by_color(splitted_input[1])
-      utilities.print_result result
-    elsif splitted_input[0] == 'slot_number_for_registration_number'
-      result = slot_num_by_registration_number(splitted_input[1])
-      utilities.print_result result
-    end
+    command_to_func_hash[splitted_input[0].to_sym].call splitted_input[1]
   end
 
   def check_and_park(splitted_input)
@@ -123,11 +115,6 @@ class ParkingSystem
   end
 
   private
-
-  def exit_execution
-    utilities.print_result 'Argument is not integer, check again'
-    exit 1
-  end
 
   def set_input_path(filename)
     @input_path = filename
